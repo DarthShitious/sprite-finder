@@ -27,12 +27,6 @@ class Trainer:
             cal_weight=0.0
         ):
 
-        self.scaling_func = LogitAB(
-            a=[-0.1, -0.1, -1.2, -1.2],
-            b=[1.1, 1.1, 1.2, 1.2],
-            device=device,
-            eps=0.05
-        )
         
         self.model = model
         self.optimizer = optimizer
@@ -83,7 +77,6 @@ class Trainer:
                 outputs[:, 4:],
                 ece_weight=self.ece_weight,
                 cal_weight=self.cal_weight,
-                scaling_func=self.scaling_func
             )
 
             # Normalize loss for accumulation
@@ -127,7 +120,6 @@ class Trainer:
                     outputs[:, 4:],
                     ece_weight=self.ece_weight,
                     cal_weight=self.cal_weight,
-                    scaling_func=self.scaling_func
                 )
 
                 running_loss += loss.item()

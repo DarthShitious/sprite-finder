@@ -53,7 +53,7 @@ def main():
     sprite_path = "/home/tabbott/Sprites/Cave/PNG/Objects_separately/128/white_crystal_light_shadow2.png"
 
     # Save directory
-    save_dir = os.path.join(os.getcwd(), time.strftime("%Y-%m-%d_%H-%M-%S"))
+    save_dir = os.path.join(os.getcwd(), "results", time.strftime("%Y-%m-%d_%H-%M-%S"))
     os.makedirs(save_dir, exist_ok=True)
 
     model_path = None
