@@ -1,9 +1,10 @@
 import os
 import torch
+import time
 import torch.optim as optim
 from torch.utils.data import random_split, DataLoader
 
-from models import ResNetSplitHeadSpritePredictor
+from models import SplitHeadSpritePredictor
 from trainer import Trainer, make_gif
 from sprite_composite import SpriteDataset
 from scheduler import CustomDecay
@@ -40,9 +41,6 @@ def load_checkpoint(model, optimizer=None, checkpoint_path="checkpoint.pth", new
 
     return model, optimizer, start_epoch
 
-
-
-
 def create_dataloader(dataset, batch_size):
     return DataLoader(
         dataset, batch_size=batch_size,
@@ -53,16 +51,17 @@ def main():
     # Paths
     background_dir = "/home/tabbott/flickr30k_images/flickr30k_images"
     sprite_path = "/home/tabbott/Sprites/Cave/PNG/Objects_separately/128/white_crystal_light_shadow2.png"
-    save_dir = "./results/layernorm_005_refinement002_logit004_pt2"
+
+    # Save directory
+    save_dir = os.path.join(os.getcwd(), time.strftime("%Y-%m-%d_%H-%M-%S"))
     os.makedirs(save_dir, exist_ok=True)
 
-    model_path = "/home/tabbott/Software/ImageRegression/results/layernorm_005_refinement002_logit004/model_state_00019.pth"
+    model_path = None
 
     # Hyperparameters
-    num_samples = int(3200*1.25)  # FULL dataset size
-    batch_size = 8
+    num_samples = int(3200*1.25)
+    batch_size = 64
     accum_steps = 32
-    ghost_batch_size = 2
     num_epochs = 20
     recycle_steps = 5
     kl_weight = 0
@@ -95,7 +94,7 @@ def main():
     val_loader = create_dataloader(val_dataset, batch_size=batch_size)
 
     # Create model
-    model = ResNetSplitHeadSpritePredictor(backbone_name="swin_b", pretrained=True, ghost_batch_size=ghost_batch_size)
+    model = SplitHeadSpritePredictor(backbone_name="resnet18", pretrained=True)
     model.to(device)
 
     # Load model checkpoint
