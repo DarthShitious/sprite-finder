@@ -8,7 +8,7 @@ import colorsys
 import imageio
 import glob
 from tqdm import tqdm
-from loss import combined_loss, LogitAB
+from loss import combined_loss
 
 
 

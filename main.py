@@ -56,7 +56,7 @@ def main():
     save_dir = os.path.join(os.getcwd(), "results", time.strftime("%Y-%m-%d_%H-%M-%S"))
     os.makedirs(save_dir, exist_ok=True)
 
-    model_path = None
+    model_path = "/home/tabbott/Software/sprite-finder/results/2025-05-12_17-57-33/model_state_00019.pth"
 
     # Hyperparameters
     num_samples = int(3200*1.25)
@@ -102,8 +102,8 @@ def main():
         model, _, _ = load_checkpoint(model=model, checkpoint_path=model_path)
 
     # Optimizer
-    backbone_lr = 1e-6
-    head_lr = 5e-4
+    backbone_lr = 4e-4
+    head_lr = 4e-4
     optimizer = optim.AdamW([
         {'params': model.backbone.parameters(), 'lr': backbone_lr},
         {'params': model.trunk.parameters(), 'lr': head_lr},

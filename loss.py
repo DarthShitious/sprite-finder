@@ -13,8 +13,6 @@ def calibration_loss(pred, target, logvar):
     cal_loss = (error - unc).abs()
     return cal_loss.mean()
 
-
-
 def gnll_loss(pred, target, logvar, beta=0.5):
     gnll_raw = 0.5 * (logvar + ((pred - target) ** 2) / torch.exp(logvar))
     weight = torch.exp(logvar * beta).detach()
@@ -47,7 +45,7 @@ def ece_loss(pred, target, logvar, n_bins=10):
 
 def combined_loss(pred, target, logvar, ece_weight=0.0, cal_weight=0.0, scaling_func=None):
     mae = torch.abs(pred - target).mean()
-    gnll, gnll_raw = gnll_loss(pred, target, logvar, scaling_func, apply_jacobian=True)
+    gnll, gnll_raw = gnll_loss(pred, target, logvar)
     ece = ece_loss(pred, target, logvar)
     cal_loss = calibration_loss(pred, target, logvar)
     total_loss = gnll + ece_weight * ece + cal_weight * cal_loss
